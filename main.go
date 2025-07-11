@@ -110,17 +110,6 @@ func main() {
 	routes.RegisterAuthRoutes(r)
 	logger.Info.Println("✅ Authentication routes registered successfully")
 
-	// Catch-all: serve frontend.html for all other GET requests (for SPA)
-	r.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "GET" {
-			logger.Info.Printf("📄 Serving frontend.html (catch-all) to %s", r.RemoteAddr)
-			http.ServeFile(w, r, "../Fontend/frontend.html")
-		} else {
-			logger.Warn.Printf("⚠️ 404 Not Found: %s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
-			http.NotFound(w, r)
-		}
-	})
-
 	// Configure CORS
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
@@ -131,6 +120,18 @@ func main() {
 		MaxAge:           300,
 	})
 	logger.Info.Println("🌐 CORS configured")
+
+	// Catch-all: serve frontend.html for all other GET requests (for SPA)
+	// ต้องวางไว้หลัง API routes เพื่อไม่ให้จับ API requests
+	r.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "GET" {
+			logger.Info.Printf("📄 Serving frontend.html (catch-all) to %s", r.RemoteAddr)
+			http.ServeFile(w, r, "../Fontend/frontend.html")
+		} else {
+			logger.Warn.Printf("⚠️ 404 Not Found: %s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
+			http.NotFound(w, r)
+		}
+	})
 
 	// Get port from environment variable
 	port := os.Getenv("PORT")
