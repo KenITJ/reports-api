@@ -105,6 +105,11 @@ func main() {
 	routes.RegisterRoutes(r)
 	logger.Info.Println("✅ API routes registered successfully")
 
+	// Register Authentication routes
+	logger.Info.Println("🔐 Registering Authentication routes...")
+	routes.RegisterAuthRoutes(r)
+	logger.Info.Println("✅ Authentication routes registered successfully")
+
 	// Catch-all: serve frontend.html for all other GET requests (for SPA)
 	r.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {

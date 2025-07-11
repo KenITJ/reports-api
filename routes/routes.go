@@ -46,3 +46,14 @@ func RegisterRoutes(r *mux.Router) {
 
 	r.HandleFunc("/healthEntry/health", handlers.HealthCheckHandler).Methods("GET")
 }
+
+// RegisterAuthRoutes registers all authentication-related routes
+func RegisterAuthRoutes(r *mux.Router) {
+	// Authentication routes
+	r.HandleFunc("/authEntry/login", handlers.LoginHandler).Methods("POST")
+	r.HandleFunc("/authEntry/registerUser", handlers.RegisterHandler("user")).Methods("POST")
+	r.HandleFunc("/authEntry/registerAdmin", handlers.RegisterHandler("admin")).Methods("POST")
+	r.HandleFunc("/authEntry/updateUser", handlers.UpdateUserHandler).Methods("PUT")
+	r.HandleFunc("/authEntry/deleteUser", handlers.DeleteUserHandler).Methods("DELETE")
+	r.HandleFunc("/authEntry/logout", handlers.LogoutHandler).Methods("POST")
+}
